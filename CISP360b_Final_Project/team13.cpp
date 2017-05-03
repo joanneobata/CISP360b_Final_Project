@@ -18,96 +18,53 @@
 using namespace std;
 
 //Prototypes
-void welcomeUser();
 void inputValue(string, char &);
-void getInfo(string &fullName, string &studentId);
+void inputStudentID(vector<string>, string);
+void valInput(char &);
+void selSubject(int &);
 void valYesNo(char &);
-void AskQs(vector<string> Questions, vector<string> Answers, int &Qasked, int &aRight);
-
-string concateName(string first, string last);
-vector<string> getQs();
-vector<string> getAs();
+void openFiles();
 
 int main()
 {
-	vector<string> Questions(getQs());
-	vector<string> Answers(getAs());
-	string studentID,
-		fullName;
-	int Qasked, // number of questions Asked
-		aRight; // number of questions right
-	char yesno;   //Select Y for Yes or N for No
+	string studentID;
+	int subject;  //Select Subject
+	vector<string> studentVector;
 
-	for (int i = 0; i < 50; i++)
-		cout << Questions[i] << endl;
-	cout << endl;
+	char yesno,   //Select Y for Yes or N for No
+		stuIn;	  //S for Student or I for Instructor 
 
-	welcomeUser(); // displays welcome prompt message
+	inputValue("Are you a student or instructor? Select S for Student or I for Instructor?", stuIn);
+	valInput(stuIn);
 
-	getInfo(fullName, studentID); // gets info from user 
+	if (stuIn == 'S')
+	{
+		do {
+			inputStudentID(studentVector, studentID);
+			cout << "Do something here - Display current Status - % correct in each area of study" << endl;
+			selSubject(subject);
 
-								  //AskQs(Questions, Answers, Qasked, aRight);
-
-								  //valYesNo(yesno);
-
-								  //inputValue("Would you like to view another report?", yesno);
+			cout << "Do something here - Grade Test" << endl;
+			cout << "Display Test Name: Area of Study, Date, % incorrect" << endl;
+			inputValue("Would you like to study more questions?", yesno);
+			valYesNo(yesno);
+		} while (yesno == 'Y'); //Continue while Yes
+	}
+	else
+	{
+		do {
+			cout << "Do something here - Display report variables: Student ID, Area of Study, Date" << endl;
+			cout << "Do something here - Display sort order options based on selected report variables" << endl;
+			cout << "Do something here - Generate report" << endl;
+			cout << "Do something here - Display report" << endl;
+			inputValue("Would you like to view another report?", yesno);
+			valYesNo(yesno);
+		} while (yesno == 'Y'); //Continue while Yes
+	}
 	system("pause");
 	return 0;
 }
-// *************************************************************
-// this function is used to open and read the Questions document
-// and return it
-// *************************************************************
-vector<string> getQs()
-{
-	vector<string> questions;
-	string line;
-	ifstream fin("questions.txt");
-	if (fin)
-	{
-		while (getline(fin, line))
-			questions.push_back(line);
-	}
-	else
-	{
-		cout << "We are sorry, there is something wrong with the pathing for the Questions document.";
-		cout << endl;
-	}
 
-	return questions;
-}
-// *************************************************************
-// This function is used to open and read the Answers document
-// and return it 
-// *************************************************************
-vector<string> getAs()
-{
-	vector<string> answers;
-	string line;
-	ifstream fin("answers.txt");
-	if (fin)
-	{
-		while (getline(fin, line))
-			answers.push_back(line);
-	}
-	else
-	{
-		cout << "We are sorry, there is something wrong with the pathing for the Answers documents.";
-		cout << endl;
-	}
-
-	return answers;
-}
-// *************************************************************
-// This module is used to display a greeting when starting the 
-// program.
-// *************************************************************
-void welcomeUser()
-{
-	cout << "**************************************************" << endl;
-	cout << setw(39) << "Welcome to the Exam study guide" << endl;
-	cout << "**************************************************" << endl;
-}
 //*************************************************************
 // Definition of function getYesNo.                           *
 // This function validates for a Y for Yes or N for No answer *
@@ -129,6 +86,27 @@ void valYesNo(char &answer)
 	} while (answer != 'Y' && answer != 'N');
 }
 //*************************************************************
+// Definition of function getChar. This function validates for*
+// an S for Student or I for Instructor answer                *
+//*************************************************************
+void valInput(char &answer)
+{
+	do {
+		cout << endl;
+		//convert lower case to upper case
+		if (answer == 's') {
+			answer = 'S';
+		}
+		else if (answer == 'i') {
+			answer = 'I';
+		}
+		if (answer != 'S' && answer != 'I') {
+			cout << "Please enter S for student or I for instructor: ";
+			cin >> answer;
+		}
+	} while (answer != 'S' && answer != 'I');
+}
+//*************************************************************
 // Definition of function inputValue.                         *
 //  This function displays query and accepts input value      *
 //*************************************************************
@@ -143,76 +121,128 @@ void inputValue(string description, char &value)
 // This function displays query and accepts input value for   *
 // student ID                                                 *
 //*************************************************************
-void getInfo(string &fullName, string &id)
+void inputStudentID(vector<string> v, string id)
 {
-
-	string first,	   // first name 
-		last;	   // last name
-
-	cout << "Please Enter your student ID: ";
+	cout << "Enter ID: ";
 	cin >> id;
-	cout << "Please Enter your first name: ";
-	cin >> first;
-	cout << "Please Enter your second name: ";
-	cin >> last;
-
-	fullName = concateName(first, last);
-
+	v.push_back(id);
 }
+
 //*************************************************************
-// Concatentate the first and last name in to one string var
-// function
+// Definition of function createTest.                         *
+// This function randomly generates a list of 10 questions for*
+// area of study selected                                     *
 //*************************************************************
-string concateName(string first, string last)
+
+void selSubject(int &choice)
 {
-	string fullName;
-	fullName = last + ", " + first;
-	return fullName;
+	do {
+		cout << "        Subject Menu" << endl;
+		cout << "------------------------------" << endl;
+		cout << "1. Arrays" << endl;
+		cout << "2. Pointers" << endl;
+		cout << "3. Vectors" << endl;
+		cout << "4. Any" << endl;
+		cout << "5. Quit this progam" << endl;
+		cout << "------------------------------" << endl;
+		cout << "Enter your choice (1-5): ";
+		cin >> choice;
+		while (cin.fail()) {                      // If cin fails to receive a value matching the declared data type.
+			cout << "Data Type not permitted.\n"; // Notify the user of error.
+			cin.clear();                          // Clear the error flag within cin.
+			cin.ignore(10000, '\n');              // Ignore the newline character in the buffer to prevent an infinite loop.
+		}
+		while (choice > 5 || choice < 1) //Validate entry for number within 1-5 range
+		{
+			cout << "The valid choices are 1, 2, 3, 4, and 5. Please choose: ";
+			cin >> choice;
+		}
+		if (choice == 1)
+		{
+			openFiles();
+		}
+		else if (choice == 2)
+		{
+			openFiles();
+		}
+		else if (choice == 3)
+		{
+			openFiles();
+		}
+		else if (choice == 4)
+		{
+			openFiles();
+		}
+
+	} while (choice != 5); //If 5 selected exit program
 }
-// ************************************************************
-// module will bring in questions and answer vectors,
-//
-// ************************************************************
-/*void AskQs(vector<string> Questions, vector<string> Answers, int &Qasked, int &aRight)
+
+//*************************************************************
+// Definition of function openFiles. This function opens files*
+// for questions and answers                                  *
+//*************************************************************
+void openFiles()
 {
-const int NUM_QUESTIONS = 50;
-const int NUM_ASKED = 10;
-string inp;
-int count = 0;
-int r;
-int remaining = NUM_QUESTIONS;
-double score = 0;
+	const int NUM_QUESTIONS = 50;
+	const int NUM_ASKED = 10;
 
-cout << "\nEnter 'True' or 'False'. Press enter for next question. \n\n";
-while (count != NUM_ASKED) {
-srand(time_t(0));
-//srand((unsigned int)time_t(NULL));
-cin.ignore(10000, '\n');              // Ignore the newline character in the buffer to prevent an infinite loop.
+	ifstream fin("questions.txt");
+	if (!fin)
+		cout << "Error in opening questions.txt file";
 
-// Random numbers divided into 'remaining' buckets, instead of using rand() % remaining.
-// Adding 'count' pushes the random number past the range of already-used questions and answers
-r = count + (int)(remaining * rand() / (RAND_MAX + 1.0));
-//r = rand() % 50;         //Create random number 1 max 50
+	vector<string> questions;
+	string line;
+	while (getline(fin, line))
+		questions.push_back(line);
 
-// Ask a question...
-cout << questions[r] << endl;
-// Get an answer!
-getline(cin, inp);
+	ifstream fin2("answers.txt");
+	if (!fin2)
+		cout << "Error in opening answers.txt file";
 
-if (inp == answers[r]) {
-cout << "Correct!\n";
-score += 1;
+	vector<string> answers;
+	string tf;
+	while (getline(fin2, tf))
+		answers.push_back(tf);
+
+
+
+	string inp;
+	int count = 0;
+	int r;
+	int remaining = NUM_QUESTIONS;
+	double score = 0;
+
+	cout << "\nEnter 'True' or 'False'. Press enter for next question. \n\n";
+	while (count != NUM_ASKED) {
+		srand(time_t(0));
+		//srand((unsigned int)time_t(NULL));
+		cin.ignore(10000, '\n');              // Ignore the newline character in the buffer to prevent an infinite loop.
+		
+		// Random numbers divided into 'remaining' buckets, instead of using rand() % remaining.
+		// Adding 'count' pushes the random number past the range of already-used questions and answers
+		r = count + (int)(remaining * rand() / (RAND_MAX + 1.0));
+		//r = rand() % 50;         //Create random number 1 max 50
+
+		/* Ask a question... */
+		cout << questions[r] << endl;
+		/* Get an answer! */
+		getline(cin, inp);
+
+		if (inp == answers[r]) {
+			cout << "Correct!\n";
+			score += 1;
+		}
+		else {
+			cout << "Incorrect.\n";
+		}
+
+		questions[r].swap(questions[count]);
+		answers[r].swap(answers[count]);
+		count += 1;
+		remaining -= 1;
+	}
+	fin.close();
+	fin2.close();
+	double correct = score / NUM_ASKED;
+	cout << "\nYour score is " << right << fixed << setprecision(0) << correct *100 << "%.\n\n";
 }
-else {
-cout << "Incorrect.\n";
-}
-
-questions[r].swap(questions[count]);
-answers[r].swap(answers[count]);
-count += 1;
-remaining -= 1;
-}
-double correct = score / NUM_ASKED;
-cout << "\nYour score is " << right << fixed << setprecision(0) << correct * 100 << "%.\n\n";
-}
-*/
